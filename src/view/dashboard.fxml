@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="controller.DashboardController"
+            stylesheets="@styles.css">
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <Label text="Student Performance Dashboard" styleClass="title-label"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Back to Students" onAction="#handleBackToStudents" styleClass="secondary-button" />
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            <HBox spacing="20">
+                <!-- Performance Metrics Cards -->
+                <VBox styleClass="metric-card, blue-card">
+                    <Label text="Highest Marks" styleClass="metric-title"/>
+                    <Label fx:id="highestMarksLabel" text="0" styleClass="metric-value"/>
+                    <Label fx:id="highestMarksStudentLabel" text="No students" styleClass="metric-subtitle"/>
+                </VBox>
+                
+                <VBox styleClass="metric-card, male-card">
+                    <Label text="Highest Male" styleClass="metric-title"/>
+                    <Label fx:id="highestMaleMarksLabel" text="0" styleClass="metric-value"/>
+                    <Label fx:id="highestMaleStudentLabel" text="No male students" styleClass="metric-subtitle"/>
+                </VBox>
+                
+                <VBox styleClass="metric-card, female-card">
+                    <Label text="Highest Female" styleClass="metric-title"/>
+                    <Label fx:id="highestFemaleMarksLabel" text="0" styleClass="metric-value"/>
+                    <Label fx:id="highestFemaleStudentLabel" text="No female students" styleClass="metric-subtitle"/>
+                </VBox>
+            </HBox>
+            
+            <HBox spacing="20">
+                <VBox styleClass="metric-card, green-card">
+                    <Label text="Average Marks" styleClass="metric-title"/>
+                    <Label fx:id="averageMarksLabel" text="0.0" styleClass="metric-value"/>
+                </VBox>
+                
+                <VBox styleClass="metric-card, pink-card">
+                    <Label text="Total Students" styleClass="metric-title"/>
+                    <Label fx:id="totalStudentsLabel" text="0" styleClass="metric-value"/>
+                </VBox>
+                
+                <VBox styleClass="metric-card, yellow-card">
+                    <Label text="Pass Rate" styleClass="metric-title"/>
+                    <Label fx:id="passRateLabel" text="0%" styleClass="metric-value"/>
+                </VBox>
+            </HBox>
+            
+            <HBox spacing="20">
+                <!-- Grade Distribution Chart -->
+                <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                    <Label text="Grade Distribution" styleClass="chart-title"/>
+                    <PieChart fx:id="gradeDistributionChart" legendVisible="true" />
+                </VBox>
+                
+                <!-- Course Performance Chart -->
+                <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                    <Label text="Course Performance" styleClass="chart-title"/>
+                    <BarChart fx:id="coursePerformanceChart">
+                        <xAxis>
+                            <CategoryAxis label="Course" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Average Marks" />
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+            </HBox>
+            
+            <!-- Top Performers Table -->
+            <VBox>
+                <Label text="Top Performers" styleClass="section-title"/>
+                <TableView fx:id="topPerformersTable" prefHeight="200.0" styleClass="student-table">
+                    <columns>
+                        <TableColumn fx:id="rankColumn" text="Rank" prefWidth="50.0" />
+                        <TableColumn fx:id="nameColumn" text="Name" prefWidth="150.0" />
+                        <TableColumn fx:id="courseColumn" text="Course" prefWidth="150.0" />
+                        <TableColumn fx:id="marksColumn" text="Marks" prefWidth="80.0" />
+                        <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="80.0" />
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 10;">
+            <Label fx:id="lastUpdatedLabel" styleClass="timestamp-label"/>
+        </HBox>
+    </bottom>
+</BorderPane>

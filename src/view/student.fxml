@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<BorderPane xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="controller.StudentController"
+            stylesheets="@styles.css">
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <Label text="Smart Student Record System" styleClass="title-label"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="View Dashboard" onAction="#handleViewDashboard" styleClass="green-button"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <TableView fx:id="studentTable" prefHeight="400.0" prefWidth="600.0" styleClass="student-table">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="150.0" />
+                <TableColumn fx:id="ageColumn" text="Age" prefWidth="50.0" />
+                <TableColumn fx:id="genderColumn" text="Gender" prefWidth="80.0" />
+                <TableColumn fx:id="courseColumn" text="Course" prefWidth="150.0" />
+                <TableColumn fx:id="marksColumn" text="Marks" prefWidth="80.0" />
+                <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="80.0" />
+            </columns>
+        </TableView>
+    </center>
+    
+    <right>
+        <VBox spacing="10" style="-fx-padding: 10;" styleClass="form-container">
+            <Label text="Student Details" styleClass="form-title"/>
+            
+            <Label text="Name:"/>
+            <TextField fx:id="nameField"/>
+            
+            <Label text="Age:"/>
+            <TextField fx:id="ageField"/>
+            
+            <Label text="Gender:"/>
+            <ComboBox fx:id="genderComboBox" prefWidth="150.0"/>
+            
+            <Label text="Course:"/>
+            <ComboBox fx:id="courseComboBox" prefWidth="150.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="EEE" />
+                        <String fx:value="ECE" />
+                        <String fx:value="CSE" />
+                        <String fx:value="IT" />
+                        <String fx:value="AI&amp;DS" />
+                        <String fx:value="AI&amp;ML" />
+                        <String fx:value="CSE(IoT)" />
+                        <String fx:value="CSD" />
+                        <String fx:value="CST" />
+                        <String fx:value="MECH" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            
+            <Label text="Marks:"/>
+            <TextField fx:id="marksField"/>
+            
+            <HBox spacing="10" style="-fx-padding: 10 0 0 0;">
+                <Button text="Add" onAction="#handleAddStudent" prefWidth="80.0" styleClass="primary-button"/>
+                <Button text="Update" onAction="#handleUpdateStudent" prefWidth="80.0" styleClass="info-button"/>
+                <Button text="Delete" onAction="#handleDeleteStudent" prefWidth="80.0" styleClass="danger-button"/>
+            </HBox>
+            
+            <Button text="Save to File" onAction="#handleSaveToFile" prefWidth="170.0" styleClass="success-button" style="-fx-margin-top: 20;"/>
+        </VBox>
+    </right>
+    
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 10;">
+            <Label fx:id="statusLabel" styleClass="status-label"/>
+        </HBox>
+    </bottom>
+</BorderPane>
