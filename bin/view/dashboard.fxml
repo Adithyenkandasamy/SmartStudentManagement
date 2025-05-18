@@ -18,43 +18,47 @@
     
     <center>
         <VBox spacing="20" style="-fx-padding: 20;">
-            <HBox spacing="20">
-                <!-- Performance Metrics Cards -->
+            <!-- Performance Metrics Cards in a horizontal line with numbers -->
+            <FlowPane hgap="10" vgap="10" styleClass="metrics-container">
+                <!-- Highest Marks Card -->
                 <VBox styleClass="metric-card, blue-card">
-                    <Label text="Highest Marks" styleClass="metric-title"/>
-                    <Label fx:id="highestMarksLabel" text="0" styleClass="metric-value"/>
-                    <Label fx:id="highestMarksStudentLabel" text="No students" styleClass="metric-subtitle"/>
-                </VBox>
+                        <Label text="Highest Marks" styleClass="metric-title"/>
+                        <Label fx:id="highestMarksLabel" text="0" styleClass="metric-value"/>
+                        <Label fx:id="highestMarksStudentLabel" text="No students" styleClass="metric-subtitle"/>
+                    </VBox>
                 
+                <!-- Highest Male Card -->
                 <VBox styleClass="metric-card, male-card">
-                    <Label text="Highest Male" styleClass="metric-title"/>
-                    <Label fx:id="highestMaleMarksLabel" text="0" styleClass="metric-value"/>
-                    <Label fx:id="highestMaleStudentLabel" text="No male students" styleClass="metric-subtitle"/>
-                </VBox>
+                        <Label text="Highest Male" styleClass="metric-title"/>
+                        <Label fx:id="highestMaleMarksLabel" text="0" styleClass="metric-value"/>
+                        <Label fx:id="highestMaleStudentLabel" text="No male students" styleClass="metric-subtitle"/>
+                    </VBox>
                 
+                <!-- Highest Female Card -->
                 <VBox styleClass="metric-card, female-card">
-                    <Label text="Highest Female" styleClass="metric-title"/>
-                    <Label fx:id="highestFemaleMarksLabel" text="0" styleClass="metric-value"/>
-                    <Label fx:id="highestFemaleStudentLabel" text="No female students" styleClass="metric-subtitle"/>
-                </VBox>
-            </HBox>
-            
-            <HBox spacing="20">
+                        <Label text="Highest Female" styleClass="metric-title"/>
+                        <Label fx:id="highestFemaleMarksLabel" text="0" styleClass="metric-value"/>
+                        <Label fx:id="highestFemaleStudentLabel" text="No female students" styleClass="metric-subtitle"/>
+                    </VBox>
+                
+                <!-- Average Marks Card -->
                 <VBox styleClass="metric-card, green-card">
-                    <Label text="Average Marks" styleClass="metric-title"/>
-                    <Label fx:id="averageMarksLabel" text="0.0" styleClass="metric-value"/>
-                </VBox>
+                        <Label text="Average Marks" styleClass="metric-title"/>
+                        <Label fx:id="averageMarksLabel" text="0.0" styleClass="metric-value"/>
+                    </VBox>
                 
+                <!-- Total Students Card -->
                 <VBox styleClass="metric-card, pink-card">
-                    <Label text="Total Students" styleClass="metric-title"/>
-                    <Label fx:id="totalStudentsLabel" text="0" styleClass="metric-value"/>
-                </VBox>
+                        <Label text="Total Students" styleClass="metric-title"/>
+                        <Label fx:id="totalStudentsLabel" text="0" styleClass="metric-value"/>
+                    </VBox>
                 
+                <!-- Pass Rate Card -->
                 <VBox styleClass="metric-card, yellow-card">
-                    <Label text="Pass Rate" styleClass="metric-title"/>
-                    <Label fx:id="passRateLabel" text="0%" styleClass="metric-value"/>
-                </VBox>
-            </HBox>
+                        <Label text="Pass Rate" styleClass="metric-title"/>
+                        <Label fx:id="passRateLabel" text="0%" styleClass="metric-value"/>
+                    </VBox>
+            </FlowPane>
             
             <HBox spacing="20">
                 <!-- Grade Distribution Chart -->
