@@ -26,6 +26,8 @@
                 <TableColumn fx:id="courseColumn" text="Course" prefWidth="150.0" />
                 <TableColumn fx:id="marksColumn" text="Marks" prefWidth="80.0" />
                 <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="80.0" />
+                <TableColumn fx:id="attendanceColumn" text="Attendance %" prefWidth="100.0" />
+                <TableColumn fx:id="eligibilityColumn" text="Exam Eligible" prefWidth="100.0" />
             </columns>
         </TableView>
     </center>
@@ -63,6 +65,11 @@
             
             <Label text="Marks:"/>
             <TextField fx:id="marksField"/>
+            
+            <Label text="Attendance Percentage:"/>
+            <TextField fx:id="attendanceField" promptText="Enter value between 0-100"/>
+            
+            <Label fx:id="eligibilityLabel" styleClass="eligibility-label"/>
             
             <HBox spacing="10" style="-fx-padding: 10 0 0 0;">
                 <Button text="Add" onAction="#handleAddStudent" prefWidth="80.0" styleClass="primary-button"/>

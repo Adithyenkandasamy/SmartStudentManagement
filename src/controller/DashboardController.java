@@ -89,22 +89,13 @@ public class DashboardController implements Initializable {
     private BarChart<String, Number> coursePerformanceChart;
     
     @FXML
-    private TableView<Student> topPerformersTable;
+    private Label avgAttendanceLabel;
     
     @FXML
-    private TableColumn<Student, Integer> rankColumn;
+    private Label eligibleStudentsLabel;
     
     @FXML
-    private TableColumn<Student, String> nameColumn;
-    
-    @FXML
-    private TableColumn<Student, String> courseColumn;
-    
-    @FXML
-    private TableColumn<Student, Integer> marksColumn;
-    
-    @FXML
-    private TableColumn<Student, String> gradeColumn;
+    private Label ineligibleStudentsLabel;
     
     private List<Student> students;
     private DecimalFormat df = new DecimalFormat("0.00");
@@ -114,51 +105,58 @@ public class DashboardController implements Initializable {
         // Load students from file
         students = FileHandler.loadStudents();
         
-        // Set up table columns
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        courseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
-        marksColumn.setCellValueFactory(new PropertyValueFactory<>("marks"));
-        gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
-        
-        // Set up custom cell factory for course column to apply course-specific styling
-        courseColumn.setCellFactory(column -> {
-            return new TableCell<Student, String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    
-                    if (item == null || empty) {
-                        setText(null);
-                        setStyle("");
-                        getStyleClass().removeAll(getStyleClass().stream()
-                            .filter(style -> style.startsWith("course-"))
-                            .toArray(String[]::new));
-                    } else {
-                        setText(item);
-                        getStyleClass().removeAll(getStyleClass().stream()
-                            .filter(style -> style.startsWith("course-"))
-                            .toArray(String[]::new));
-                        
-                        // Apply course-specific styling
-                        String courseClass = getCourseStyleClass(item);
-                        getStyleClass().addAll("course-label", courseClass);
-                    }
-                }
-            };
+        // We need to resize the window after the scene is fully initialized
+        javafx.application.Platform.runLater(() -> {
+            try {
+                Stage stage = (Stage) gradeDistributionChart.getScene().getWindow();
+                stage.setWidth(800);
+                stage.setHeight(700);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         
-        // Custom cell factory for rank column
-        rankColumn.setCellValueFactory(cellData -> {
-            int index = topPerformersTable.getItems().indexOf(cellData.getValue()) + 1;
-            return new javafx.beans.property.SimpleIntegerProperty(index).asObject();
-        });
-        
-        // Update dashboard
+        // Update performance metrics
         updatePerformanceMetrics();
         
-        // Set last updated time
+        // Update grade distribution chart
+        updateGradeDistributionChart();
+        
+        // Update course performance chart
+        updateCoursePerformanceChart();
+        
+        // Update attendance summary
+        updateAttendanceSummary();
+        
+        // Update timestamp
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         lastUpdatedLabel.setText("Last updated: " + LocalDateTime.now().format(formatter));
+    }
+    
+    private void updateAttendanceSummary() {
+        if (students != null && !students.isEmpty()) {
+            // Calculate average attendance
+            double avgAttendance = students.stream()
+                .mapToDouble(Student::getAttendancePercentage)
+                .average()
+                .orElse(0.0);
+            
+            // Count eligible and ineligible students
+            long eligibleCount = students.stream()
+                .filter(Student::isExamEligible)
+                .count();
+            
+            long ineligibleCount = students.size() - eligibleCount;
+            
+            // Update labels
+            avgAttendanceLabel.setText(df.format(avgAttendance) + "%");
+            eligibleStudentsLabel.setText(String.valueOf(eligibleCount));
+            ineligibleStudentsLabel.setText(String.valueOf(ineligibleCount));
+        } else {
+            avgAttendanceLabel.setText("0%");
+            eligibleStudentsLabel.setText("0");
+            ineligibleStudentsLabel.setText("0");
+        }
     }
     
     private void updatePerformanceMetrics() {
@@ -227,14 +225,8 @@ public class DashboardController implements Initializable {
             averageMarksLabel.setText("0.0");
             passRateLabel.setText("0%");
         }
-        // Update top performers table
-        updateTopPerformersTable();
-        
-        // Update grade distribution chart
-        updateGradeDistributionChart();
-        
-        // Update course performance chart
-        updateCoursePerformanceChart();
+        // Update attendance summary
+        updateAttendanceSummary();
     }
     
     private void updateGradeDistributionChart() {
@@ -290,15 +282,7 @@ public class DashboardController implements Initializable {
         }
     }
     
-    private void updateTopPerformersTable() {
-        // Sort students by marks (descending)
-        List<Student> topStudents = students.stream()
-                .sorted(Comparator.comparing(Student::getMarks).reversed())
-                .limit(10)  // Top 10 students
-                .collect(Collectors.toList());
-        
-        topPerformersTable.setItems(FXCollections.observableArrayList(topStudents));
-    }
+
     
     @FXML
     private void handleBackToStudents() {

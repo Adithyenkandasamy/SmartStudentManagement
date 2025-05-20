@@ -17,7 +17,9 @@ public class FileHandler {
                         s.getGender(),
                         s.getCourse(),
                         String.valueOf(s.getMarks()),
-                        s.getGrade()
+                        s.getGrade(),
+                        String.valueOf(s.getAttendancePercentage()),
+                        String.valueOf(s.isExamEligible())
                 ));
                 bw.newLine();
             }
@@ -32,13 +34,24 @@ public class FileHandler {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length >= 6) {
+                if (parts.length >= 7) {
+                    double attendance = 0.0;
+                    if (parts.length >= 8) {
+                        try {
+                            attendance = Double.parseDouble(parts[7]);
+                        } catch (NumberFormatException e) {
+                            // Default to 0 if parsing fails
+                            attendance = 0.0;
+                        }
+                    }
+                    
                     Student s = new Student(
                         parts[0],
                         Integer.parseInt(parts[1]),
                         parts[2],
                         parts[3],
-                        Integer.parseInt(parts[4])
+                        Integer.parseInt(parts[4]),
+                        attendance
                     );
                     list.add(s);
                 }

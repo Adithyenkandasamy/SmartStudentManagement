@@ -81,18 +81,23 @@
                 </VBox>
             </HBox>
             
-            <!-- Top Performers Table -->
-            <VBox>
-                <Label text="Top Performers" styleClass="section-title"/>
-                <TableView fx:id="topPerformersTable" prefHeight="200.0" styleClass="student-table">
-                    <columns>
-                        <TableColumn fx:id="rankColumn" text="Rank" prefWidth="50.0" />
-                        <TableColumn fx:id="nameColumn" text="Name" prefWidth="150.0" />
-                        <TableColumn fx:id="courseColumn" text="Course" prefWidth="150.0" />
-                        <TableColumn fx:id="marksColumn" text="Marks" prefWidth="80.0" />
-                        <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="80.0" />
-                    </columns>
-                </TableView>
+            <!-- Attendance Summary Section -->
+            <VBox styleClass="summary-container">
+                <Label text="Attendance Summary" styleClass="section-title"/>
+                <HBox spacing="20" alignment="CENTER">
+                    <VBox styleClass="metric-card, blue-card">
+                        <Label text="Average Attendance" styleClass="metric-title"/>
+                        <Label fx:id="avgAttendanceLabel" text="0%" styleClass="metric-value"/>
+                    </VBox>
+                    <VBox styleClass="metric-card, green-card">
+                        <Label text="Eligible Students" styleClass="metric-title"/>
+                        <Label fx:id="eligibleStudentsLabel" text="0" styleClass="metric-value"/>
+                    </VBox>
+                    <VBox styleClass="metric-card, red-card">
+                        <Label text="Ineligible Students" styleClass="metric-title"/>
+                        <Label fx:id="ineligibleStudentsLabel" text="0" styleClass="metric-value"/>
+                    </VBox>
+                </HBox>
             </VBox>
         </VBox>
     </center>

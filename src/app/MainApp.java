@@ -12,6 +12,10 @@ public class MainApp extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
         stage.setTitle("Smart Student Record System");
         stage.setScene(new Scene(root));
+        
+        stage.setWidth(1000);
+        stage.setHeight(800);
+        
         stage.show();
     }
 

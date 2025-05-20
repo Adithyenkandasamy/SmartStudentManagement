@@ -65,6 +65,12 @@ public class StudentController implements Initializable {
     private TableColumn<Student, String> gradeColumn;
     
     @FXML
+    private TableColumn<Student, Double> attendanceColumn;
+    
+    @FXML
+    private TableColumn<Student, Boolean> eligibilityColumn;
+    
+    @FXML
     private TextField nameField;
     
     @FXML
@@ -78,6 +84,12 @@ public class StudentController implements Initializable {
     
     @FXML
     private TextField marksField;
+    
+    @FXML
+    private TextField attendanceField;
+    
+    @FXML
+    private Label eligibilityLabel;
     
     @FXML
     private Label statusLabel;
@@ -96,6 +108,8 @@ public class StudentController implements Initializable {
         courseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
         marksColumn.setCellValueFactory(new PropertyValueFactory<>("marks"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
+        attendanceColumn.setCellValueFactory(new PropertyValueFactory<>("attendancePercentage"));
+        eligibilityColumn.setCellValueFactory(new PropertyValueFactory<>("examEligible"));
         
         // Set up custom cell factory for course column to apply course-specific styling
         courseColumn.setCellFactory(column -> {
@@ -124,6 +138,43 @@ public class StudentController implements Initializable {
             };
         });
         
+        // Set up custom cell factory for eligibility column to show Yes/No instead of true/false
+        eligibilityColumn.setCellFactory(column -> {
+            return new TableCell<Student, Boolean>() {
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+                    
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item ? "Yes" : "No");
+                        if (item) {
+                            setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                        } else {
+                            setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                        }
+                    }
+                }
+            };
+        });
+        
+        // Set up listener for attendance field to update eligibility label
+        attendanceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                double attendance = Double.parseDouble(newValue);
+                boolean eligible = attendance >= 75.0;
+                eligibilityLabel.setText("Exam Eligibility: " + (eligible ? "Eligible" : "Not Eligible"));
+                eligibilityLabel.setStyle(eligible ? 
+                    "-fx-text-fill: green; -fx-font-weight: bold;" : 
+                    "-fx-text-fill: red; -fx-font-weight: bold;");
+            } catch (NumberFormatException e) {
+                eligibilityLabel.setText("Enter valid attendance");
+                eligibilityLabel.setStyle("-fx-text-fill: orange;");
+            }
+        });
+        
         // Load students from file
         loadStudentsFromFile();
         
@@ -135,6 +186,7 @@ public class StudentController implements Initializable {
                 genderComboBox.setValue(newSelection.getGender());
                 courseComboBox.setValue(newSelection.getCourse());
                 marksField.setText(String.valueOf(newSelection.getMarks()));
+                attendanceField.setText(String.valueOf(newSelection.getAttendancePercentage()));
             }
         });
     }
@@ -154,13 +206,20 @@ public class StudentController implements Initializable {
             String gender = genderComboBox.getValue();
             String course = courseComboBox.getValue();
             int marks = Integer.parseInt(marksField.getText());
+            double attendance = Double.parseDouble(attendanceField.getText());
             
             if (name.isEmpty() || gender == null || course == null) {
                 updateStatus("Please fill all fields");
                 return;
             }
             
-            Student student = new Student(name, age, gender, course, marks);
+            // Validate attendance percentage is between 0 and 100
+            if (attendance < 0 || attendance > 100) {
+                updateStatus("Attendance percentage must be between 0 and 100");
+                return;
+            }
+            
+            Student student = new Student(name, age, gender, course, marks, attendance);
             studentList.add(student);
             clearFields();
             updateStatus("Student added successfully");
@@ -183,9 +242,16 @@ public class StudentController implements Initializable {
             String gender = genderComboBox.getValue();
             String course = courseComboBox.getValue();
             int marks = Integer.parseInt(marksField.getText());
+            double attendance = Double.parseDouble(attendanceField.getText());
             
             if (name.isEmpty() || gender == null || course == null) {
                 updateStatus("Please fill all fields");
+                return;
+            }
+            
+            // Validate attendance percentage is between 0 and 100
+            if (attendance < 0 || attendance > 100) {
+                updateStatus("Attendance percentage must be between 0 and 100");
                 return;
             }
             
@@ -194,6 +260,7 @@ public class StudentController implements Initializable {
             selectedStudent.setGender(gender);
             selectedStudent.setCourse(course);
             selectedStudent.setMarks(marks);
+            selectedStudent.setAttendancePercentage(attendance);
             
             studentTable.refresh();
             clearFields();
@@ -228,6 +295,8 @@ public class StudentController implements Initializable {
         genderComboBox.setValue(null);
         courseComboBox.setValue(null);
         marksField.clear();
+        attendanceField.clear();
+        eligibilityLabel.setText("");
     }
     
     private void updateStatus(String message) {
@@ -244,6 +313,11 @@ public class StudentController implements Initializable {
             Parent root = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
             Stage stage = (Stage) nameField.getScene().getWindow();
             stage.setTitle("Student Performance Dashboard");
+            
+            // Set a smaller window size for dashboard
+            stage.setWidth(800);
+            stage.setHeight(700);
+            
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             updateStatus("Error loading dashboard view");
